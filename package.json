@@ -5,7 +5,7 @@
   "author": "test",
   "license": "test",
   "scripts": {
-    "test": "jest"
+    "test": "jest --no-cache"
   },
   "dependencies": {
     "@types/jest": "^22.2.0",
@@ -25,6 +25,7 @@
     "shortid": "^2.2.8",
     "supertest": "^3.0.0",
     "tracer": "^0.8.12",
+    "ts-jest": "^23.0.0",
     "tsc": "^1.20150623.0",
     "typescript": "^2.6.2",
     "winston": "2.4.0",
@@ -43,7 +44,23 @@
     "proxyquire": "1.8.0"
   },
   "main": "app.js",
-  "jest":{
+  "jest": {
+    "collectCoverage": true,
+    "coverageReporters": [
+      "lcov","text"
+    ],
+    "collectCoverageFrom": [
+      "**/*.{js}",
+      "!**/node_modules/**"
+    ],
+    "timers": "real",
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "coverageDirectory": "./test-coverage",
+    "testRegex": "(/tests/.*|\\.(test|spec))\\.(ts|js)$",
+    "moduleFileExtensions": [
+      "js"
+    ]
   }
-
 }
