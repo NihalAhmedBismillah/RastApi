@@ -30,7 +30,7 @@ export class ClsTweet {
      * 
      * @param tweetId 
      */
-    public static getTweet(tweetId: string) {
+    public static getTweet(tweetId: number) {
 
         return new Promise((res, rej) => {
             DbOperation.find({ _id: tweetId }, COLLECTION_NAME)
@@ -48,10 +48,10 @@ export class ClsTweet {
      * 
      * @param tweetId 
      */
-    public static getTweetList(pageNo: number,pageSize:number) {
+    public static getTweetList(pageNo: number, pageSize: number) {
 
         return new Promise((res, rej) => {
-            DbOperation.findWithPaginantion(pageNo,pageSize, COLLECTION_NAME)
+            DbOperation.findWithPaginantion(pageNo, pageSize, COLLECTION_NAME)
                 .then((data: ITweet) => {
                     res(data);
                 })
@@ -64,24 +64,39 @@ export class ClsTweet {
      * 
      * @param tweetId 
      */
-    public static deleteTweet(tweetId: string) {
+    public static deleteTweet(tweetId: number) {
 
         return new Promise((res, rej) => {
-
-
+            DbOperation.remove({ _id: tweetId }, COLLECTION_NAME).then((data: ITweet) => {
+                res(data);
+            }).catch((error) => {
+                rej(error);
+            });
         });
-
     }
     /**
      * 
      * @param tweetId 
      */
-    public static updateTweet(tweetId: string) {
+    public static updateTweet(tweetId: number, postData: ITweet) {
 
         return new Promise((res, rej) => {
-
-
+            let updateObject: any = {
+                query: {
+                    _id: tweetId
+                },
+                updateFields: {
+                    content: postData.content,
+                    updated_at: new Date()
+                }
+            }
+            DbOperation.updateFields(updateObject, COLLECTION_NAME)
+                .then((data: ITweet) => {
+                    res(data);
+                })
+                .catch((error) => {
+                    rej(error);
+                });
         });
-
     }
 }

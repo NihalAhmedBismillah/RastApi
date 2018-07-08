@@ -23,8 +23,8 @@ export class TweetController {
                 })
             });
             app.get('/api/v1/tweet/:id', (req, res) => {
-                let id: string = req.params.id;
-                console.log('id : ',id);
+                let id: number = req.params.id;
+
                 ClsTweet.getTweet(id).then((data) => {
                     res.json(data);
                 }).catch((error) => {
@@ -36,33 +36,44 @@ export class TweetController {
                 });
             });
             app.get('/api/v1/tweet', (req, res) => {
-                console.log(req.query);
-               let pageNo :number=  parseInt(req.query.page, 10) || 1;
-               let pageSize:number = parseInt(req.query.pagesize, 10) || 5; 
-               let id: string = req.params.id;
-               console.log('pageNo : ',pageNo)
-               console.log('pageSize : ',pageSize)
-               ClsTweet.getTweetList(pageNo,pageSize).then((data) => {
-                   console.log('result : ',data)
-                   res.json(data);
-               }).catch((error) => {
-                   let resp: IError = <IError>{
-                       message: error,
-                       detail: 'data not get'
-                   };
-                   res.json(resp);
-               })
+
+                let pageNo: number = +req.query.page || 1;
+                let pageSize: number = +req.query.pagesize || 5;
+                ClsTweet.getTweetList(pageNo, pageSize).then((data) => {
+                    res.json(data);
+                }).catch((error) => {
+                    let resp: IError = <IError>{
+                        message: error,
+                        detail: 'data not get'
+                    };
+                    res.json(resp);
+                })
             });
             app.put('/api/v1/tweet/:id', (req, res) => {
-                let bodyData: any = req.body;
-                let id: string = req.params.id;
-                //TODO: Save data in database.
-                res.send(bodyData);
+                let bodyData: ITweet = req.body;
+                let id: number = req.params.id;
+                ClsTweet.updateTweet(id, bodyData).then((result: any) => {
+                    res.send(result);
+                }).catch((error) => {
+                    let resp: IError = <IError>{
+                        message: error,
+                        detail: 'data not update '
+                    };
+                    res.json(resp);
+                });
+
             });
             app.delete('/api/v1/tweet/:id', (req, res) => {
-                //TODO:Delete data from database
-                let id: string = req.params.id;
-                res.json({ id: id, message: 'record deleted' });
+                let id: number = req.params.id;
+                ClsTweet.deleteTweet(id).then((data: any) => {
+                    res.send(data);
+                }).catch((error) => {
+                    let resp: IError = <IError>{
+                        message: error,
+                        detail: 'data not update '
+                    };
+                    res.json(resp);
+                });
             });
 
             app.get('/', (req, res) => {

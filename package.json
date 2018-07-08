@@ -2,7 +2,7 @@
   "name": "api",
   "version": "1.0.0",
   "description": "api",
-  "author": "test",
+  "author": "nihaltomail@gmail.com",
   "license": "test",
   "scripts": {
     "test": "jest --no-cache"

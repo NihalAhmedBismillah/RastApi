@@ -18,7 +18,7 @@ export class DbOperation {
             let db = global['locator'].get('db');
             let collection = db.collection(collectionName);
             collection.save(data, (error, result) => {
-                return (!error) ? resolve(result) : reject(error);
+                return (!error) ? resolve(result.result) : reject(error);
             });
         });
     }
@@ -36,7 +36,7 @@ export class DbOperation {
             let collection = db.collection(collectionName);
             collection.update(updateOptions.query, { $set: updateOptions.updateFields }, { upsert: true }, (error, result) => {
                 if (!error) {
-                    res(result);
+                    res(result.result);
                 } else {
                     rej(error);
                 }
@@ -105,7 +105,7 @@ export class DbOperation {
             let db = global['locator'].get('db');
             let collection = db.collection(collectionName);
             collection.remove(query, (error, result) => {
-                return (!error) ? res(result) : rej(error);
+                return (!error) ? res(result.result) : rej(error);
             });
         });
     }

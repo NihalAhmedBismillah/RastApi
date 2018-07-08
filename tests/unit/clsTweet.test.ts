@@ -1,12 +1,13 @@
 'use strict';
 
 import { ClsTweet } from "./../../lib/clsTweet";
-import { DbConnect } from "./../../lib/dbConnect"
+import { MockDbConnect } from "../../mockDb/mockDbConnection"
 
 describe('Test for cart class', () => {
 
     beforeAll(async (done) => {
-        await DbConnect.dbConnect();
+        await MockDbConnect.dbConnect();
+        await MockDbConnect.dropTestCollection();
         done();
     });
     test('Scenario sending valid body object ====>\n', async (done) => {
@@ -16,13 +17,9 @@ describe('Test for cart class', () => {
             created_at: "",
             updated_at: ""
         };
-        let body: any = {
-            tweet: tweet
-        };
 
-        ClsTweet.addTweet(body).then((data: any) => {
-           // console.log('data test', data);
-            expect(data.result).toBeTruthy()
+        ClsTweet.addTweet(tweet).then((data: any) => {
+            expect(data).toBeTruthy()
             done();
         }).catch((error) => {
             console.log('errr test', error)
